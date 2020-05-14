@@ -1,0 +1,36 @@
+{
+  "orderId": 9999999,
+  "customerId": 444444,
+  "shippingId": 555555,
+  "status": "NEW",
+  "products": [
+    {
+      "productId": "1234_5",
+      "productImageUrl": "http://aws.com/img?k=1234",
+      "price": 88.51,
+      "quantity": 1
+    }
+  ],
+  "timestamp": "2012-04-23T18:25:43.511Z\n\n",
+  "orderPlaced": "2012-04-23",
+  "invoiceUrl": "http://aws.com/invoice?k=9999999",
+  "transactionSummary": {
+    "subtotal": 88.51,
+    "tax": 0.09,
+    "adjustment": 0,
+    "shipping": 0,
+    "paid": 88.51,
+    "refunded": 0,
+    "grandtotal": 88.51
+  }
+},
+{
+  "customerId": 444444,
+  "products": [
+    {
+      "productId": "1234_5",
+      "quantity": 1
+    }
+  ]
+  }
+}
