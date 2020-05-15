@@ -2,6 +2,7 @@
   "orderId": 9999999,
   "customerId": 444444,
   "shippingId": 555555,
+  "shipper": "FedEx",
   "status": "NEW",
   "products": [
     {
@@ -22,15 +23,5 @@
     "paid": 88.51,
     "refunded": 0,
     "grandtotal": 88.51
-  }
-},
-{
-  "customerId": 444444,
-  "products": [
-    {
-      "productId": "1234_5",
-      "quantity": 1
-    }
-  ]
   }
 }
