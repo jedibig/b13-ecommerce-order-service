@@ -1,22 +1,25 @@
 package com.b13.orderservice.service;
 
+import com.b13.orderservice.dto.NewOrder;
 import com.b13.orderservice.dto.Order;
-import org.springframework.cache.annotation.CachePut;
+
+
 
 import javax.transaction.Transactional;
+
+import java.util.List;
 import java.util.Optional;
 
 @Transactional(value = Transactional.TxType.REQUIRES_NEW)
 public interface OrderService {
 
-    Order newOrder(Order order);
+    Optional<Order> insertNewOrder(NewOrder order);
 
-    @CachePut
     Optional<Order> getOrderById(long id);
 
-    @CachePut
-    Order modifyOrder(Order order);
+    boolean modifyOrder(Order order);
 
-    Optional<Order> getOrderByCustomerId(String customerId);
+    Optional<List<Order>> getOrdersByCustomerId(String customerId);
 
+	boolean requestCancelation(long id);
 }

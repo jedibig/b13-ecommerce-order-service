@@ -5,10 +5,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
-import java.util.Map;
+import java.util.List;
 
 @Data
 @Entity
@@ -17,6 +18,7 @@ import java.util.Map;
 @Table(name = "b13_order_table")
 public class Order {
     @Id @Column(name = "order_id")
+    @GeneratedValue
     private long id;
 
     @Column(name = "customer_id")
@@ -24,18 +26,18 @@ public class Order {
 
     @Column(name = "shippingId")
     private String shippingId;
+    
+    @Column(name = "shipper")
+    private String shipper;
 
     @Enumerated(EnumType.STRING)
     @Embedded
-    private Status status;
+    private OrderStatus status;
 
     @NotNull
     @ElementCollection
-    @MapKeyColumn(name="productId")
-    @Column(name="imageUrl")
-    @CollectionTable(name="b13_order_product_table", joinColumns=@JoinColumn(name="order_id"))
-    private Map<String, String> products; // productId + imageUrl
-
+    private List<ProductInformation> products;
+    
     @DateTimeFormat(pattern = "dd-MM-yy")
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "timestamp")
@@ -51,19 +53,5 @@ public class Order {
 
     @Embedded
     private OrderSumary summary;
-
-    @Embeddable
-    public enum Status {
-        NEW, AWAIT_PAYMENT, PAID, MODIFIED, CANCELED, CANCELED_REQUEST, RETURNED_REQUEST;
-
-        private String note;
-
-        public String getNote() {
-            return note;
-        }
-
-        public void setNote(String note) {
-            this.note = note;
-        }
-    }
+      
 }
