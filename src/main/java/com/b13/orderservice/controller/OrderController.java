@@ -37,6 +37,11 @@ public class OrderController {
     	
     }
     
+    // TODO retrive orders by UserID
+    
+    
+    // TODO cancel orders by id if shipping is not yet done
+
     @GetMapping("/{id}")
     public ResponseEntity<?> cancelOrderById(@PathVariable("id") long id){
         if (orderService.requestCancelation(id)) {
