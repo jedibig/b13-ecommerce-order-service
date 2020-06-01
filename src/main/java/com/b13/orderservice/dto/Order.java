@@ -11,6 +11,7 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -52,7 +53,7 @@ public class Order {
     private OrderStatus status;
 
     @NotNull
-    @ElementCollection
+    @OneToMany
     private List<ProductInformation> products;
     
     @DateTimeFormat(pattern = "dd-MM-yy")

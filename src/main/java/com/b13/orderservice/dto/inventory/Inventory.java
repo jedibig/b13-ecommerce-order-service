@@ -2,10 +2,12 @@ package com.b13.orderservice.dto.inventory;
 
 import java.math.BigDecimal;
 
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import javax.persistence.Version;
 
 import com.b13.orderservice.dto.ProductInformation;
@@ -30,10 +32,10 @@ public class Inventory {
 	private String merchantId;
 	@Enumerated(EnumType.STRING)
 	private InventoryStatus status;
-	private BigDecimal price;
+//	private BigDecimal price;
 	
-	
-	private ProductInformation products;
+	@Embedded
+	private InventoryProductInfo products;
 	
 	@Version
 	private int version;

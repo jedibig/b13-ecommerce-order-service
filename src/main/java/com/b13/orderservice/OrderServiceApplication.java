@@ -6,6 +6,8 @@ import org.springframework.context.annotation.Bean;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import brave.sampler.Sampler;
+
 
 @SpringBootApplication
 public class OrderServiceApplication {
@@ -17,6 +19,11 @@ public class OrderServiceApplication {
     @Bean
     public ObjectMapper mapper() {
     	return new ObjectMapper();
+    }
+    
+    @Bean
+    public Sampler defaultSampler() {
+        return Sampler.ALWAYS_SAMPLE;
     }
 
 }

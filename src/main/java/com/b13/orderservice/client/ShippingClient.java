@@ -10,7 +10,7 @@ import com.b13.orderservice.dto.ShippingInformation;
 
 import feign.Headers;
 
-@FeignClient("shipping-service")
+//@FeignClient("shipping-service")
 public interface ShippingClient {
 	
 	@PostMapping("/shipping")

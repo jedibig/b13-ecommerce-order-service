@@ -25,7 +25,7 @@ public class OrderServiceImpl implements OrderService {
 
 	final OrderRepository repository;
 	final InventoryService inventory;
-	final ShippingClient shippingClient;
+//	final ShippingClient shippingClient;
 	
 	@Override
 	@Transactional(value = TxType.REQUIRES_NEW)
@@ -46,9 +46,9 @@ public class OrderServiceImpl implements OrderService {
 		}
 		
 		order.ifPresent(o -> {
-			ShippingInformation shipInfo = shippingClient.getShippingQuote(shipping);
-			o.setShippingId(shipInfo.getShippingId());
-			o.getSummary().setShipping(shipInfo.getCost().doubleValue());
+//			ShippingInformation shipInfo = shippingClient.getShippingQuote(shipping);
+//			o.setShippingId(shipInfo.getShippingId());
+//			o.getSummary().setShipping(shipInfo.getCost().doubleValue());
 		});
 		return order;
 	}
@@ -86,7 +86,7 @@ public class OrderServiceImpl implements OrderService {
 
 	@Override
 	public Optional<List<Order>> getOrdersByCustomerId(String customerId) {
-		return repository.findByCustomerId();
+		return repository.findByCustomerId(customerId);
 	}
 
 
