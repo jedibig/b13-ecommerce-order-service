@@ -1,37 +1,25 @@
-package com.b13.orderservice.dto;
-
-import java.util.Date;
-import java.util.List;
-
-import javax.persistence.Column;
-import javax.persistence.ElementCollection;
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
-
-import org.springframework.format.annotation.DateTimeFormat;
-
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
+package com.b13.orderservice.dto.order;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import com.b13.orderservice.dto.OrderStatus;
+import com.b13.orderservice.dto.OrderSumary;
+import com.b13.orderservice.dto.ProductInformation;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.util.Date;
+import java.util.List;
 
 @Data
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "b13_order_table")
-@JsonInclude(Include.NON_DEFAULT)
-public class Order {
+public class PersistableOrder {
     @Id @Column(name = "order_id")
     @GeneratedValue
     private long id;
@@ -53,6 +41,7 @@ public class Order {
 
     @NotNull
     @ElementCollection
+    @OneToMany(cascade = CascadeType.ALL)
     private List<ProductInformation> products;
     
     @DateTimeFormat(pattern = "dd-MM-yy")
@@ -70,13 +59,5 @@ public class Order {
 
     @Embedded
     private OrderSumary summary;
-
-	public void generateSummary() {
-		if (summary == null)
-			summary = new OrderSumary();
-		summary.setTax(0.9);
-		summary.setSubtotal(products.stream().mapToDouble(products -> products.getPrice().doubleValue()).sum());
-		summary.calculateTotal();
-	}
       
 }

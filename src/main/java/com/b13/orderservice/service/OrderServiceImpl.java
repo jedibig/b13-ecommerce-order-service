@@ -1,7 +1,5 @@
 package com.b13.orderservice.service;
 
-import java.util.Date;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
@@ -10,11 +8,15 @@ import javax.transaction.Transactional.TxType;
 
 import org.springframework.stereotype.Service;
 
+import com.b13.orderservice.client.ShippingClient;
 import com.b13.orderservice.dao.OrderRepository;
-import com.b13.orderservice.dto.NewOrder;
 import com.b13.orderservice.dto.Order;
-import com.b13.orderservice.dto.OrderStatus;
-import com.b13.orderservice.dto.ProductInformation;
+import com.b13.orderservice.dto.ShippingInformation;
+import com.b13.orderservice.dto.cart.Cart;
+import com.b13.orderservice.dto.util.CartToOrderMapper;
+import com.b13.orderservice.exception.NotEnoughInventoryException;
+import com.b13.orderservice.exception.OrderIdNotFoundException;
+
 import lombok.AllArgsConstructor;
 
 @Service
@@ -23,41 +25,58 @@ public class OrderServiceImpl implements OrderService {
 
 	final OrderRepository repository;
 	final InventoryService inventory;
-//	final RabbitTemplate rabbitTemplate;
+	final ShippingClient shippingClient;
 	
 	@Override
 	@Transactional(value = TxType.REQUIRES_NEW)
-	public Optional<Order> insertNewOrder(NewOrder newOrder) {
-		Order order = new Order();
-		order.setCustomerId(newOrder.getCustomerId());
-		order.setShipper(newOrder.getShipper());
-		order.setProducts(new LinkedList<ProductInformation>());
-		newOrder.getProducts().forEach(product -> {
-			order.getProducts().add(ProductInformation.builder()
-							  .product_id(product.productId)
-							  .quantity(product.quantity)
-							  .sku(product.sku).build());
-//			rabbitTemplate.convertAndSend("order-product", product.productId);
-			
-			inventory.removeFromInventory(product.sku, product.quantity);
-			
-			});
-		order.setOrderPlaced(new Date());
-		order.setTimestamp(new Date());
-		order.setStatus(OrderStatus.NEW);
+	public Order insertNewOrder(Cart cart) {
+		Order order = CartToOrderMapper.mapCart(cart);
+		if (!inventory.holdItem(order.getProducts()))
+			throw new NotEnoughInventoryException();
 		
-		//TODO invoiceUrl, Order summary
-		
-		repository.save(order);
-		
-		
-		return Optional.of(order);
+		Order updatedOrder = repository.save(order);
+		return updatedOrder;
 	}
+	
+	@Override
+	public Optional<Order> updateShipment(String shipping, long orderId) {
+		Optional<Order> order = getOrderById(orderId);
+		if (!order.isPresent()) {
+			throw new OrderIdNotFoundException();
+		}
+		
+		order.ifPresent(o -> {
+			ShippingInformation shipInfo = shippingClient.getShippingQuote(shipping);
+			o.setShippingId(shipInfo.getShippingId());
+			o.getSummary().setShipping(shipInfo.getCost().doubleValue());
+		});
+		return order;
+	}
+
+
+
+
+	@Override
+	public Optional<Order> updatePayment(long id, String payment) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	
 
 	@Override
 	public Optional<Order> getOrderById(long id) {
 		return repository.findById(id);
 	}
+
+
+	@Override
+	public Optional<Order> settle(long id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	
 
 	@Override
 	public boolean modifyOrder(Order order) {
@@ -70,11 +89,6 @@ public class OrderServiceImpl implements OrderService {
 		return repository.findByCustomerId();
 	}
 
-	@Override
-	@Transactional(value = TxType.REQUIRES_NEW)
-	public boolean requestCancelation(long id) {
-		// TODO request cancellation
-		return false;
-	}
 
+	
 }

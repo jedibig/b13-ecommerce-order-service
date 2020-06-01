@@ -1,7 +1,5 @@
 package com.b13.orderservice.controller;
 
-import java.util.List;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -14,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.b13.orderservice.dto.Inventory;
+import com.b13.orderservice.dto.inventory.Inventory;
 import com.b13.orderservice.service.InventoryService;
 
 import lombok.AllArgsConstructor;
@@ -32,7 +30,7 @@ public class InventoryController {
 	
 	@DeleteMapping({"/{sku}", "/"})
 	@ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
-	public void deletInventory(@PathVariable("sku") String sku){}
+	public void deleteInventory(@PathVariable("sku") String sku){}
 	
 	@PostMapping
 	@ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)

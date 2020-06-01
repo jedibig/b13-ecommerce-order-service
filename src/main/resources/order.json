@@ -1,4 +1,4 @@
-{
+[{
   "orderId": 9999999,
   "customerId": 444444,
   "shippingId": 555555,
@@ -24,4 +24,18 @@
     "refunded": 0,
     "grandtotal": 88.51
   }
-}
+},
+{
+	"orderId": 9999999,
+  	"customerId": 444444,
+  	"orderPlaced": "2012-04-23",
+  	"transactionSummary": {
+	    "subtotal": 88.51,
+	    "tax": 0.09,
+	    "adjustment": 0,
+	    "shipping": 0,
+	    "paid": 88.51,
+	    "refunded": 0,
+	    "grandtotal": 88.51
+  	}
+}]
